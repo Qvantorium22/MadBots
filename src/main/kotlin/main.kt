@@ -6,8 +6,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import realize.DrawHuman
 
 fun main() = Window {
+
+    val drawer = DrawHuman(arrayListOf())
+    drawer.data
     var text by remember { mutableStateOf("Hello, World!") }
 
     MaterialTheme {
