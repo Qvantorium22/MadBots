@@ -1,0 +1,5 @@
+package realize
+
+class Interactor {
+
+}
