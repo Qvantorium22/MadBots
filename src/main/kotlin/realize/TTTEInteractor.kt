@@ -9,7 +9,7 @@ class TTTEInteractor(
     Matrix(3, 3, false)
 ) {
     override fun transform(value: Int): Markelable {
-        return Mark.values().find { value + 1 == it.value } ?: Mark.X
+        return Mark.values().find { value == it.value } ?: Mark.X
     }
 
     private var _currentPlayer: MadPlayer = firstPlayer

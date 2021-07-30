@@ -1,7 +1,7 @@
 package core
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.flow.*
 
 class Matrix(
     override val weight: Int,
@@ -9,10 +9,10 @@ class Matrix(
     override val autoResize: Boolean
 ) : MatrixConfig {
 
-    private val _data: ArrayList<ArrayList<Int>> = arrayListOf()
+    private val _data: MutableList<MutableList<Int>> = mutableListOf()
 
-    private val _dataFlow = MutableStateFlow(_data)
-    val dataFlow : StateFlow<ArrayList<ArrayList<Int>>> = _dataFlow
+    private val _dataFlow: MutableStateFlow<Array<Array<Int>>?> = MutableStateFlow(null)
+    val dataFlow: StateFlow<Array<Array<Int>>?> = _dataFlow
 
     init {
         for (i in 0 until weight) {
@@ -30,9 +30,19 @@ class Matrix(
 
     fun setMark(point: Point, value: Int) {
         _data[point.y][point.x] = value
+        update()
     }
 
     fun deleteMark(point: Point) {
         _data[point.y][point.x] = 0
+        update()
+    }
+
+    private fun update() {
+        _dataFlow.value = Array(_data.size) { x ->
+            Array(_data[x].size) { y ->
+                _data[x][y]
+            }
+        }
     }
 }

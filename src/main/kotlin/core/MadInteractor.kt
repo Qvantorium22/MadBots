@@ -1,19 +1,24 @@
 package core
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 abstract class MadInteractor(
     private val matrix: Matrix
 ) : ChangeMatrix {
 
-    abstract fun transform(value :Int) :Markelable
+    abstract fun transform(value: Int): Markelable
 
-    val markFlow : Flow<List<List<Markelable>>> = matrix.dataFlow. map { row->
-        List(row.size) { collumn ->
-            List(row[collumn].size) {
-                transform(it)
-            }
+    private val _markFlow: MutableStateFlow<List<List<Markelable>>?> = MutableStateFlow(null)
+    val markFlow: StateFlow<List<List<Markelable>>?> = _markFlow
+
+    suspend fun connect() {
+        matrix.dataFlow.collect { row ->
+            if (row != null)
+                _markFlow.value = List(row.size) { collumn ->
+                    List(row[collumn].size) { y ->
+                        transform(row[collumn][y])
+                    }
+                }
         }
     }
 
