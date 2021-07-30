@@ -10,9 +10,12 @@ class Matrix(
 ) : MatrixConfig {
 
     private val _data: MutableList<MutableList<Int>> = mutableListOf()
-
-    private val _dataFlow: MutableStateFlow<Array<Array<Int>>?> = MutableStateFlow(null)
+    private val _dataFlow: MutableStateFlow<Array<Array<Int>>?> = MutableStateFlow(getDataArray())
     val dataFlow: StateFlow<Array<Array<Int>>?> = _dataFlow
+
+    init {
+        _dataFlow.value = getDataArray()
+    }
 
     init {
         for (i in 0 until weight) {
@@ -39,7 +42,11 @@ class Matrix(
     }
 
     private fun update() {
-        _dataFlow.value = Array(_data.size) { x ->
+        _dataFlow.value = getDataArray()
+    }
+
+    private fun getDataArray(): Array<Array<Int>> {
+        return Array(_data.size) { x ->
             Array(_data[x].size) { y ->
                 _data[x][y]
             }

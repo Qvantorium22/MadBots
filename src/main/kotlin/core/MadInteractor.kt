@@ -1,15 +1,28 @@
 package core
 
+import core.validators.PoleIsEmptyValidators
 import kotlinx.coroutines.flow.*
 
 abstract class MadInteractor(
-    private val matrix: Matrix
+    val matrix: Matrix
 ) : ChangeMatrix {
 
     abstract fun transform(value: Int): Markelable
 
     private val _markFlow: MutableStateFlow<List<List<Markelable>>?> = MutableStateFlow(null)
-    val markFlow: StateFlow<List<List<Markelable>>?> = _markFlow
+    val markFlow: Flow<List<List<Markelable>>?> = matrix.dataFlow.map { row ->
+        var list = listOf<List<Markelable>>()
+        if (row != null) {
+            list = List(row.size) { collumn ->
+                List(row[collumn].size) { y ->
+                    transform(row[collumn][y])
+                }
+            }
+        }
+        else
+            println(row)
+        return@map list
+    }
 
     suspend fun connect() {
         matrix.dataFlow.collect { row ->
@@ -22,14 +35,18 @@ abstract class MadInteractor(
         }
     }
 
-    private val matrixValidators = mutableListOf<MadMatrixValidator>()
+    private val matrixValidators = mutableListOf(
+        PoleIsEmptyValidators { matrix.getPole(it) }
+    )
 
     override fun insertMark(point: Point, mark: Markelable): Boolean {
-        if (validate(point).find { it is ValidateResult.Error } == null) {
+        return if (validate(point).find { it is ValidateResult.Error } == null) {
             matrix.setMark(point, mark.value)
-            return true
+            true
+        } else {
+            println(validate(point).find{ it is ValidateResult.Error }.toString())
+            false
         }
-        return false
     }
 
     override fun deleteMark(point: Point): Boolean {
@@ -42,7 +59,7 @@ abstract class MadInteractor(
         return true
     }
 
-    fun validate(point: Point): List<ValidateResult> {
+    private fun validate(point: Point): List<ValidateResult> {
         return matrixValidators.map { it.validate(point) }
     }
 }

@@ -1,6 +1,8 @@
 package realize
 
 import core.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class TTTEInteractor(
     val firstPlayer: MadPlayer,
@@ -9,7 +11,7 @@ class TTTEInteractor(
     Matrix(3, 3, false)
 ) {
     override fun transform(value: Int): Markelable {
-        return Mark.values().find { value == it.value } ?: Mark.X
+        return Mark.values().find { value  == it.value } ?: Mark.X
     }
 
     private var _currentPlayer: MadPlayer = firstPlayer
@@ -23,8 +25,9 @@ class TTTEInteractor(
 
     fun playerTurn(player: ConsolePlayer) {
         if (player == _currentPlayer) {
-            insertMark(player.turn(), player.mark)
-            swapPlayer()
+            println("Ожидание хода: ")
+            if (insertMark(player.turn(), player.mark))
+                swapPlayer()
         }
     }
 }
