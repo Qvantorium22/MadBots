@@ -1,34 +1,38 @@
 package core
 
-class Matrix(override val weight: Int, override val height : Int, override val autoResize: Boolean): MatrixConfig {
-    private val data: ArrayList<ArrayList<Int>> = arrayListOf()
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+class Matrix(
+    override val weight: Int,
+    override val height: Int,
+    override val autoResize: Boolean
+) : MatrixConfig {
+
+    private val _data: ArrayList<ArrayList<Int>> = arrayListOf()
+
+    private val _dataFlow = MutableStateFlow(_data)
+    val dataFlow : StateFlow<ArrayList<ArrayList<Int>>> = _dataFlow
 
     init {
         for (i in 0 until weight) {
             val line = arrayListOf<Int>()
-            for (j in 0 until height){
+            for (j in 0 until height) {
                 line.add(0)
             }
-            data.add(line)
+            _data.add(line)
         }
     }
 
     fun getPole(point: Point): Int {
-        return data[point.y][point.x]
+        return _data[point.y][point.x]
     }
 
-    fun setMark(point: Point, value: Int){
-        data[point.y][point.x] = value
+    fun setMark(point: Point, value: Int) {
+        _data[point.y][point.x] = value
     }
 
     fun deleteMark(point: Point) {
-        data[point.y][point.x] = 0
-    }
-
-    fun printConsole(){
-        data.forEach{
-            println(it)
-        }
-        println()
+        _data[point.y][point.x] = 0
     }
 }

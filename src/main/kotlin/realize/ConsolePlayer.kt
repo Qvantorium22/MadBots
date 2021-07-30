@@ -1,9 +1,12 @@
 package realize
 
 import core.MadPlayer
-import java.awt.Point
+import core.Markelable
+import core.Point
 
-class ConsolePlayer : MadPlayer {
+class ConsolePlayer(
+    val mark: Markelable
+) : MadPlayer {
     override fun turn(): Point {
         return Point(
             readLine()!!.toInt(),

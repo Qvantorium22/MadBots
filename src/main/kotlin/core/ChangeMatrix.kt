@@ -1,16 +1,14 @@
 package core
 
-import realize.Mark
-
 interface ChangeMatrix {
-    fun insertMark(point: Point, mark: Mark)
+    fun insertMark(point: Point, mark: Markelable): Boolean
 
-    fun deleteMark(point: Point)
+    fun deleteMark(point: Point): Boolean
 
-    fun changeMark(point: Point, mark: Mark){
-        deleteMark(point)
-        insertMark(point, mark)
+    fun changeMark(point: Point, mark: Markelable): Boolean {
+        //TODO can delete without insert
+        return (deleteMark(point) && insertMark(point, mark))
     }
 
-    fun copyMark(fromPoint: Point, toPoint: Point)
+    fun copyMark(fromPoint: Point, toPoint: Point): Boolean
 }
