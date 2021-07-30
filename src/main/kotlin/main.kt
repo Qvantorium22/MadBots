@@ -6,19 +6,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import core.ChangeMatrixManager
+import core.Matrix
+import core.Point
 import realize.DrawHuman
+import realize.Mark
 
-fun main() = Window {
+fun main() {
 
-    val drawer = DrawHuman(arrayListOf())
-    drawer.data
-    var text by remember { mutableStateOf("Hello, World!") }
-
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
-        }
-    }
 }
