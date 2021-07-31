@@ -9,6 +9,8 @@ abstract class MadInteractor(
 
     abstract fun transform(value: Int): Markelable
 
+    abstract fun checkWin(): Int
+
     private val _markFlow: MutableStateFlow<List<List<Markelable>>?> = MutableStateFlow(null)
     val markFlow: Flow<List<List<Markelable>>?> = matrix.dataFlow.map { row ->
         var list = listOf<List<Markelable>>()

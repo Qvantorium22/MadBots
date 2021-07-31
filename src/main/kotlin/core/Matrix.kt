@@ -28,7 +28,10 @@ class Matrix(
     }
 
     fun getPole(point: Point): Int {
-        return _data[point.y][point.x]
+        return if (point.x < weight && point.y < height)
+            _data[point.y][point.x]
+        else
+            0
     }
 
     fun setMark(point: Point, value: Int) {
