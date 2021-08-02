@@ -1,5 +1,6 @@
 package realize
 
+import androidx.compose.runtime.mutableStateOf
 import core.*
 
 class TTTEInteractor(
@@ -11,6 +12,8 @@ class TTTEInteractor(
     override fun transform(value: Int): Markelable {
         return Mark.values().find { value == it.value } ?: Mark.X
     }
+
+
 
     override fun checkWin(): Int {
         val needLength = 3
@@ -165,11 +168,16 @@ class TTTEInteractor(
             firstPlayer
     }
 
-    fun playerTurn(player: ConsolePlayer) {
+    fun playerTurn(player: UIPlayer, x: Int, y: Int) {
         if (player == _currentPlayer) {
             println("Ожидание хода: ")
-            if (insertMark(player.turn(), player.mark))
+            if (insertMark(player.turn(x, y), player.mark)) {
                 swapPlayer()
+                if (checkWin() != 0) {
+                    println("win" + checkWin())
+                    stateWin.value = "win" + checkWin()
+                }
+            }
         }
     }
     private fun checkPole(firstPoint: Point, secondPoint: Point) = matrix.getPole(firstPoint) == matrix.getPole(secondPoint)

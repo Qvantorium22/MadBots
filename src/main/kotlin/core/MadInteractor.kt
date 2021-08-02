@@ -1,7 +1,10 @@
 package core
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import core.validators.PoleIsEmptyValidators
 import kotlinx.coroutines.flow.*
+import realize.Mark
 
 abstract class MadInteractor(
     val matrix: Matrix
@@ -11,7 +14,10 @@ abstract class MadInteractor(
 
     abstract fun checkWin(): Int
 
+    val stateWin = mutableStateOf("")
+
     private val _markFlow: MutableStateFlow<List<List<Markelable>>?> = MutableStateFlow(null)
+    val listState = List(matrix.height){List(matrix.weight){ mutableStateOf(Mark.NOTHING.sym)}}
     val markFlow: Flow<List<List<Markelable>>?> = matrix.dataFlow.map { row ->
         var list = listOf<List<Markelable>>()
         if (row != null) {
@@ -26,14 +32,13 @@ abstract class MadInteractor(
         return@map list
     }
 
+
     suspend fun connect() {
         matrix.dataFlow.collect { row ->
             if (row != null)
-                _markFlow.value = List(row.size) { collumn ->
-                    List(row[collumn].size) { y ->
-                        transform(row[collumn][y])
-                    }
-                }
+                for (y in row.indices)
+                    for (x in row[y].indices)
+                        listState[x][y].value = (transform(row[x][y]) as Mark).sym
         }
     }
 

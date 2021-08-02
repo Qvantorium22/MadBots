@@ -11,6 +11,7 @@ group = "castprogramms"
 version = "1.0"
 
 repositories {
+
     jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
@@ -19,6 +20,8 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation(compose.desktop.currentOs)
+    implementation("com.arkivanov.decompose:decompose:0.2.6")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.2.6")
 }
 
 tasks.test {
