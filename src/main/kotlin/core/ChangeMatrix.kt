@@ -1,14 +1,15 @@
 package core
 
-interface ChangeMatrix {
-    fun insertMark(point: Point, mark: Markelable): Boolean
+interface ChangeMatrix<T : Markelable> {
+    fun insertMark(point: Point, mark: T): Boolean
 
     fun deleteMark(point: Point): Boolean
 
-    fun changeMark(point: Point, mark: Markelable): Boolean {
-        //TODO can delete without insert
+    fun changeMark(point: Point, mark: T): Boolean {
         return (deleteMark(point) && insertMark(point, mark))
     }
 
     fun copyMark(fromPoint: Point, toPoint: Point): Boolean
+
+    fun getMark(point: Point) : T
 }

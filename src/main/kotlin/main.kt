@@ -11,12 +11,7 @@ import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.rememberRootComponent
-import core.Matrix
-import core.Point
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import navigation.NavHostComponent
-import realize.Mark
 import realize.TTTEInteractor
 import realize.UIPlayer
 

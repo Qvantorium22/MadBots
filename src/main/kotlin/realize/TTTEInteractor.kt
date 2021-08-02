@@ -1,19 +1,19 @@
 package realize
 
-import androidx.compose.runtime.mutableStateOf
-import core.*
+import core.MadInteractor
+import core.MadPlayer
+import core.Matrix
+import core.Point
 
 class TTTEInteractor(
     val firstPlayer: MadPlayer,
     val secondPlayer: MadPlayer
-) : MadInteractor(
+) : MadInteractor<Mark>(
     Matrix(3, 3, false)
 ) {
-    override fun transform(value: Int): Markelable {
+    override fun transform(value: Int): Mark {
         return Mark.values().find { value == it.value } ?: Mark.X
     }
-
-
 
     override fun checkWin(): Int {
         val needLength = 3
@@ -22,8 +22,8 @@ class TTTEInteractor(
             var currentPole : Int
             for (y in matrixData.indices){
                 for (x in matrixData[y].indices){
-                    if (matrix.getPole(Point(x, y)) != 0){
-                        currentPole = matrix.getPole(Point(x, y))
+                    if (getMark(Point(x, y)).value != 0){
+                        currentPole = getMark(Point(x, y)).value
                         when(x){
                             0 -> {
                                 if (checkPole(Point(x, y), Point(x, y + 1))){
@@ -180,5 +180,5 @@ class TTTEInteractor(
             }
         }
     }
-    private fun checkPole(firstPoint: Point, secondPoint: Point) = matrix.getPole(firstPoint) == matrix.getPole(secondPoint)
+    private fun checkPole(firstPoint: Point, secondPoint: Point) = getMark(firstPoint).value == getMark(secondPoint).value
 }

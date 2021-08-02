@@ -1,58 +1,42 @@
 package core
 
-import androidx.compose.runtime.collectAsState
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class Matrix(
     override val weight: Int,
     override val height: Int,
     override val autoResize: Boolean
 ) : MatrixConfig {
-
-    private val _data: MutableList<MutableList<Int>> = mutableListOf()
-    private val _dataFlow: MutableStateFlow<Array<Array<Int>>?> = MutableStateFlow(getDataArray())
-    val dataFlow: StateFlow<Array<Array<Int>>?> = _dataFlow
-
-    init {
-        _dataFlow.value = getDataArray()
+    companion object {
+        private const val defaultMark = 0
     }
+
+    private val _dataFlow: MutableStateFlow<ArrayList<ArrayList<Int>>> = MutableStateFlow(arrayListOf(arrayListOf()))
+    val dataFlow: StateFlow<ArrayList<ArrayList<Int>>?> = _dataFlow
 
     init {
         for (i in 0 until weight) {
             val line = arrayListOf<Int>()
             for (j in 0 until height) {
-                line.add(0)
+                line.add(defaultMark)
             }
-            _data.add(line)
+            _dataFlow.value.add(line)
         }
     }
 
-    fun getPole(point: Point): Int {
-        return if (point.x < weight && point.y < height)
-            _data[point.y][point.x]
-        else
-            0
-    }
 
     fun setMark(point: Point, value: Int) {
-        _data[point.y][point.x] = value
+        _dataFlow.value[point.y][point.x] = value
         update()
     }
 
     fun deleteMark(point: Point) {
-        _data[point.y][point.x] = 0
+        _dataFlow.value[point.y][point.x] = 0
         update()
     }
 
     private fun update() {
-        _dataFlow.value = getDataArray()
-    }
-
-    private fun getDataArray(): Array<Array<Int>> {
-        return Array(_data.size) { x ->
-            Array(_data[x].size) { y ->
-                _data[x][y]
-            }
-        }
+        _dataFlow.value = _dataFlow.value.clone() as ArrayList<ArrayList<Int>>
     }
 }
