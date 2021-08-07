@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import navigation.NavComponent
-import java.util.prefs.Preferences
 
 class StartScreen(
     private val componentContext: ComponentContext,
-    private val GoToStartMenu: () -> Unit
+    private val GoToStartMenu: () -> Unit,
+    private val GoToSelectionIcon: () -> Unit
 ) : NavComponent, ComponentContext by componentContext {
 
     @Composable
@@ -64,16 +64,21 @@ class StartScreen(
                                 modifier = Modifier.fillMaxSize()
                             )
 
-                            Image(
-                                bitmap = imageResource("drawable/pencil.png"),
-                                contentDescription = "",
-                                modifier = Modifier.fillMaxSize(0.25f).align(Alignment.BottomEnd)
-                            )
+                            Button(
+                                onClick = { GoToSelectionIcon(); println("icon") },
+                                modifier = Modifier.fillMaxSize(0.25f).align(Alignment.BottomEnd),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF89C6EF))
+                            ){
+                                Image(
+                                    bitmap = imageResource("drawable/pencil.png"),
+                                    contentDescription = ""
+                                )
+                            }
                         }
                         Column(modifier = Modifier.padding(start = 30.dp)) {
                             Button(
-                                onClick = { GoToStartMenu() },
-                                modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp),
+                                onClick = { GoToStartMenu(); println("qu qu") },
+                                modifier = Modifier.fillMaxWidth().padding(bottom = 30.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF89C6EF))
                             ) {
                                 Image(
@@ -92,7 +97,7 @@ class StartScreen(
                             }
 
                             Button(
-                                onClick = {},
+                                onClick = {  },
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF89C6EF))
                             ) {
