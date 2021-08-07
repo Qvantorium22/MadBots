@@ -48,7 +48,7 @@ class NavHostComponent(componentContext: ComponentContext) : NavComponent, Compo
     }
 
     private fun onGoToTest() {
-        router.push(ScreenConfig.Test)
+        router.push(ScreenConfig.Test())
     }
 
     private fun onGoToIcon() {
@@ -66,7 +66,7 @@ class NavHostComponent(componentContext: ComponentContext) : NavComponent, Compo
     private sealed class ScreenConfig() : Parcelable {
         class Splash : ScreenConfig()
         class Start : ScreenConfig()
-        object Test : ScreenConfig()
+        class Test : ScreenConfig()
         class SelectionIcon : ScreenConfig()
         data class Finish(val name: String) : ScreenConfig()
     }

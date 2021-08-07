@@ -1,41 +1,26 @@
 package navigation.screens
 
-import androidx.compose.desktop.DesktopTheme
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.vectorXmlResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
-import core.MadInteractor
-import core.Matrix
-import core.Point
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import navigation.NavComponent
 import realize.Mark
-import realize.MarkTransform.transformToMark
 import realize.TTTEInteractor
 import realize.UIPlayer
 import realize.User
-import javax.swing.BoxLayout
-
 
 class TestScreen(
     private val componentContext: ComponentContext,
@@ -51,27 +36,12 @@ class TestScreen(
         secondPlayer
     )
     private val sizeMatrix = interactor.getSizeMatrix()
-    var listState = listOf<List<MutableState<Mark>>>()
+    var listState = arrayListOf<ArrayList<MutableState<Int>>>()
     private var isFirstPlayerMove = mutableStateOf(true)
 
     init {
-        listState = List(sizeMatrix.height) { List(sizeMatrix.height) { mutableStateOf(Mark.NOTHING) } }
-        GlobalScope.launch(Dispatchers.Main) {
-            connect()
-        }
+        listState = interactor.getDataFlow().value!!
         stateWin = interactor.stateWin
-    }
-
-    private fun connect() {
-        GlobalScope.launch(Dispatchers.Main) {
-            interactor.getDataFlow().collect { row ->
-                if (row != null) {
-                    for (y in row.indices)
-                        for (x in row[y].indices)
-                            listState[x][y].value = (transformToMark(row[x][y]) as Mark)
-                }
-            }
-        }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -166,7 +136,7 @@ class TestScreen(
                                 .padding(start = 5.dp),
                             onClick = {
                                 if (interactor.stateWin.value == "") {
-                                    connect()
+//                                    connect()
                                     if (isFirstPlayerMove.value) {
                                         if (interactor.playerTurn(firstPlayer, i, j)) {
                                             isFirstPlayerMove.value = !isFirstPlayerMove.value
@@ -187,15 +157,15 @@ class TestScreen(
                         ) {
                             val modifier = Modifier.padding(5.dp)
                             when (listState[j][i].value) {
-                                Mark.NOTHING -> {
+                                Mark.NOTHING.value -> {
                                 }
-                                Mark.X ->
+                                Mark.X.value ->
                                     Image(
                                         bitmap = imageResource("drawable/krest.png"),
                                         contentDescription = "",
                                         modifier = modifier
                                     )
-                                Mark.Y ->
+                                Mark.Y.value ->
                                     Image(
                                         bitmap = imageResource("drawable/nolik.png"),
                                         contentDescription = "",
