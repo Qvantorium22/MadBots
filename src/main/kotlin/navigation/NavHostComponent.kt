@@ -9,6 +9,7 @@ import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
 import navigation.screens.FinishScreen
 import navigation.screens.SplashScreen
+import navigation.screens.StartScreen
 import navigation.screens.TestScreen
 
 class NavHostComponent(componentContext: ComponentContext) : NavComponent, ComponentContext by componentContext {
@@ -22,12 +23,18 @@ class NavHostComponent(componentContext: ComponentContext) : NavComponent, Compo
         componentContext: ComponentContext
     ): NavComponent {
         return when (screenConfig) {
-            is ScreenConfig.Splash ->{
+            is ScreenConfig.Splash -> {
                 SplashScreen(componentContext, ::onGoToStartMenu)
             }
-            is ScreenConfig.Main -> {
+
+            is ScreenConfig.Start -> {
+                StartScreen(componentContext, ::onGoToTest)
+            }
+
+            is ScreenConfig.Test -> {
                 TestScreen(componentContext, ::onGoToFinish)
             }
+
             is ScreenConfig.Finish -> {
                 FinishScreen(componentContext, screenConfig.name, ::onGoToBack)
             }
@@ -35,7 +42,11 @@ class NavHostComponent(componentContext: ComponentContext) : NavComponent, Compo
     }
 
     private fun onGoToStartMenu() {
-        router.push(ScreenConfig.Main)
+        router.push(ScreenConfig.Start())
+    }
+
+    private fun onGoToTest() {
+        router.push(ScreenConfig.Test)
     }
 
     private fun onGoToBack() {
@@ -47,8 +58,9 @@ class NavHostComponent(componentContext: ComponentContext) : NavComponent, Compo
     }
 
     private sealed class ScreenConfig() : Parcelable {
-        class Splash: ScreenConfig()
-        object Main : ScreenConfig()
+        class Splash : ScreenConfig()
+        class Start : ScreenConfig()
+        object Test : ScreenConfig()
         data class Finish(val name: String) : ScreenConfig()
     }
 

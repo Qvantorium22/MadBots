@@ -3,60 +3,19 @@ import androidx.compose.desktop.Window
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.v1.Menu
+import androidx.compose.ui.window.v1.MenuBar
+import androidx.compose.ui.window.v1.MenuItem
 import com.arkivanov.decompose.extensions.compose.jetbrains.rememberRootComponent
 import navigation.NavHostComponent
-import realize.TTTEInteractor
-import realize.UIPlayer
 
-@OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
-@Composable
-private fun NewsStory(interactor: TTTEInteractor, firstPlayer: UIPlayer, secondPlayer: UIPlayer) {
+fun main() = Window(size = IntSize(900, 600), resizable = true, title = "MadBots") {
     MaterialTheme {
-        DesktopTheme {
-            var isFirstPlayerMove = true
-            Column {
-                for (j in interactor.listState.indices) {
-                    Row {
-                        for (i in interactor.listState[j].indices) {
-                            Card(
-                                modifier = Modifier.height(52.dp)
-                                    .width(100.dp)
-                                    .padding(start = 10.dp, bottom = 10.dp)
-                                    .align(Alignment.Top),
-                                onClick = {
-                                    if (interactor.stateWin.value == "") {
-                                        if (isFirstPlayerMove) {
-                                            interactor.playerTurn(firstPlayer, i, j)
-                                        } else
-                                            interactor.playerTurn(secondPlayer, i, j)
-                                        isFirstPlayerMove = !isFirstPlayerMove
-                                    }
-                                }
-                            ) {
-                                Text(
-                                    text = interactor.listState[j][i].value.toString(),
-                                    modifier = Modifier.align(Alignment.CenterVertically)
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Row { Text(interactor.stateWin.value) }
-            }
-        }
-    }
-}
-
-fun main() = Window(size = IntSize(900, 600), resizable = false) {
-    DecomposeDesktopExampleTheme {
         rememberRootComponent(factory = ::NavHostComponent).render()
     }
 }

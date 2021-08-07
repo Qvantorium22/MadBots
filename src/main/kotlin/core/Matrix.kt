@@ -16,13 +16,14 @@ class Matrix(
     val dataFlow: StateFlow<ArrayList<ArrayList<Int>>?> = _dataFlow
 
     init {
+        val data = arrayListOf<ArrayList<Int>>()
         for (i in 0 until weight) {
             val line = arrayListOf<Int>()
-            for (j in 0 until height) {
+            for (j in 0 until height)
                 line.add(defaultMark)
-            }
-            _dataFlow.value.add(line)
+            data.add(line)
         }
+        _dataFlow.value = data
     }
 
 
@@ -33,6 +34,18 @@ class Matrix(
 
     fun deleteMark(point: Point) {
         _dataFlow.value[point.y][point.x] = 0
+        update()
+    }
+
+    fun clearData(){
+        val data = arrayListOf<ArrayList<Int>>()
+        for (i in 0 until weight) {
+            val line = arrayListOf<Int>()
+            for (j in 0 until height)
+                line.add(defaultMark)
+            data.add(line)
+        }
+        _dataFlow.value = data
         update()
     }
 
