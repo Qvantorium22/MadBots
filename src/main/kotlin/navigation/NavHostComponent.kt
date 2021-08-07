@@ -32,7 +32,7 @@ class NavHostComponent(componentContext: ComponentContext) : NavComponent, Compo
             }
 
             is ScreenConfig.Test -> {
-                TestScreen(componentContext, ::onGoToFinish)
+                TestScreen(componentContext, ::onGoToFinish, ::onGoToBack)
             }
 
             is ScreenConfig.Finish -> {

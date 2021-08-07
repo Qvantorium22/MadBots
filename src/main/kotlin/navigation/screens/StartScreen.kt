@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import navigation.NavComponent
+import java.util.prefs.Preferences
 
 class StartScreen(
     private val componentContext: ComponentContext,
@@ -71,7 +72,7 @@ class StartScreen(
                         }
                         Column(modifier = Modifier.padding(start = 30.dp)) {
                             Button(
-                                onClick = { GoToStartMenu(); println("qu qu") },
+                                onClick = { GoToStartMenu() },
                                 modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF89C6EF))
                             ) {

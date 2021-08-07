@@ -167,15 +167,18 @@ class TTTEInteractor(
             firstPlayer
     }
 
-    fun playerTurn(player: UIPlayer, x: Int, y: Int) {
+    fun playerTurn(player: UIPlayer, x: Int, y: Int): Boolean {
         if (player == _currentPlayer) {
-            if (insertMark(player.turn(x, y), player.mark)) {
+            val result = insertMark(player.turn(x, y), player.mark)
+            if (result) {
                 swapPlayer()
                 if (checkWin() != 0) {
                     stateWin.value = "win" + checkWin()
                 }
             }
+            return result
         }
+        return false
     }
     private fun checkPole(firstPoint: Point, secondPoint: Point) = getMark(firstPoint).value == getMark(secondPoint).value
 }
