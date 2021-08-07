@@ -72,7 +72,7 @@ class StartScreen(
                         Column(modifier = Modifier.padding(start = 30.dp)) {
                             Button(
                                 onClick = { GoToStartMenu(); println("qu qu") },
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF89C6EF))
                             ) {
                                 Image(
@@ -89,11 +89,6 @@ class StartScreen(
                                     modifier = Modifier.weight(4f)
                                 )
                             }
-                            Divider(
-                                color = Color(0xFFE5E5E5),
-                                thickness = 12.dp,
-                                modifier = Modifier.fillMaxWidth().padding(bottom = 40.dp)
-                            )
 
                             Button(
                                 onClick = {},
@@ -114,11 +109,6 @@ class StartScreen(
                                     modifier = Modifier.weight(4f)
                                 )
                             }
-                            Divider(
-                                color = Color(0xFFE5E5E5),
-                                thickness = 12.dp,
-                                modifier = Modifier.fillMaxWidth()
-                            )
                         }
                     }
                 }

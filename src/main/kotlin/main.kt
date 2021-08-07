@@ -37,6 +37,7 @@ fun DecomposeDesktopExampleTheme(
         }
     }
 }
+
 val primary = Color(48, 163, 230)
 val secondary = Color(24, 25, 29)
 

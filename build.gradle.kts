@@ -18,7 +18,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.0")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.4.30")
     implementation(compose.desktop.currentOs)
     implementation("com.arkivanov.decompose:decompose:0.2.6")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.2.6")
