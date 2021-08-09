@@ -1,9 +1,8 @@
 package realize
 
-import core.MadInteractor
-import core.MadPlayer
-import core.Matrix
-import core.Point
+import androidx.compose.runtime.MutableState
+import core.*
+import kotlinx.coroutines.flow.collect
 
 class TTTEInteractor(
     val firstPlayer: MadPlayer,
@@ -168,17 +167,23 @@ class TTTEInteractor(
             firstPlayer
     }
 
-    fun playerTurn(player: UIPlayer, x: Int, y: Int) {
+    fun playerTurn(player: UIPlayer, x: Int, y: Int): Boolean {
         if (player == _currentPlayer) {
-            println("Ожидание хода: ")
-            if (insertMark(player.turn(x, y), player.mark)) {
+            val result = insertMark(player.turn(x, y), player.mark)
+            println(matrix.dataFlow.value?.get(y)?.get(x)?.value)
+            if (result) {
                 swapPlayer()
                 if (checkWin() != 0) {
-                    println("win" + checkWin())
                     stateWin.value = "win" + checkWin()
                 }
             }
+            return result
         }
+        return false
     }
     private fun checkPole(firstPoint: Point, secondPoint: Point) = getMark(firstPoint).value == getMark(secondPoint).value
+
+    fun restart(){
+        _currentPlayer = firstPlayer
+    }
 }

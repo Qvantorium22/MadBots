@@ -1,6 +1,9 @@
 package core
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.unit.IntSize
 import core.validators.PoleIsEmptyValidators
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,38 +22,24 @@ abstract class MadInteractor<T : Markelable>(
 
     private val _markFlow: MutableStateFlow<List<List<T>>?> = MutableStateFlow(null)
 
-//    val listState = List(matrix.height) {
-//        List(matrix.weight) {
-//            mutableStateOf(Mark.NOTHING.sym)
-//        }
+//    val markFlow: Flow<List<List<T>>?> = matrix.dataFlow.map { row ->
+//        var list = listOf<List<T>>()
+//        if (row != null) {
+//            list = List(row.size) { collumn ->
+//                List(row[collumn].size) { y ->
+//                    transform(row[collumn][y])
+//                }
+//            }
+//        } else
+//            println(row)
+//        return@map list
 //    }
 
-    val markFlow: Flow<List<List<T>>?> = matrix.dataFlow.map { row ->
-        var list = listOf<List<T>>()
-        if (row != null) {
-            list = List(row.size) { collumn ->
-                List(row[collumn].size) { y ->
-                    transform(row[collumn][y])
-                }
-            }
-        } else
-            println(row)
-        return@map list
-    }
-
-
-//    suspend fun connect() {
-//        matrix.dataFlow.collect { row ->
-//            if (row != null)
-//                for (y in row.indices)
-//                    for (x in row[y].indices)
-//                        listState[x][y].value = (transform(row[x][y]) as Mark).sym
-//        }
-//    }
+    fun getDataFlow() = matrix.dataFlow
 
     private val matrixValidators = mutableListOf(
         PoleIsEmptyValidators {
-            matrix.dataFlow.value!![it.y][it.x]
+            matrix.dataFlow.value!![it.y][it.x].value
         }
     )
 
@@ -75,10 +64,16 @@ abstract class MadInteractor<T : Markelable>(
     }
 
     override fun getMark(point: Point): T {
-        return transform(matrix.dataFlow.value!![point.y][point.x])
+        return if (point.y in 0 until matrix.height && point.x in 0 until matrix.weight)
+            transform(matrix.dataFlow.value!![point.y][point.x].value)
+                else transform(0)
     }
 
     private fun validate(point: Point): List<ValidateResult> {
         return matrixValidators.map { it.validate(point) }
     }
+
+    fun getSizeMatrix() = IntSize(matrix.weight, matrix.height)
+
+    fun clearData() = matrix.clearData()
 }
