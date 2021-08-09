@@ -1,8 +1,6 @@
-package realize
+package tictactoe
 
-import androidx.compose.runtime.MutableState
 import core.*
-import kotlinx.coroutines.flow.collect
 
 class TTTEInteractor(
     val firstPlayer: MadPlayer,

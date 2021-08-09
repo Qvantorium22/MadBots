@@ -1,7 +1,6 @@
-package realize
+package tictactoe
 
 import core.MadPlayer
-import core.Markelable
 import core.Point
 
 class UIPlayer(val mark: Mark): MadPlayer {

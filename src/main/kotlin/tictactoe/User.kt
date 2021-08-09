@@ -1,4 +1,4 @@
-package realize
+package tictactoe
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.imageResource

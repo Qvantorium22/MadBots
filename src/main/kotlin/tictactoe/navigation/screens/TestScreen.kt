@@ -1,4 +1,4 @@
-package navigation.screens
+package tictactoe.navigation.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,14 +13,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import navigation.NavComponent
-import realize.Mark
-import realize.TTTEInteractor
-import realize.UIPlayer
-import realize.User
+import tictactoe.navigation.NavComponent
+import tictactoe.Mark
+import tictactoe.TTTEInteractor
+import tictactoe.UIPlayer
+import tictactoe.User
 
 class TestScreen(
     private val componentContext: ComponentContext,

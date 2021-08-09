@@ -1,4 +1,4 @@
-package navigation.screens
+package tictactoe.navigation.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.ComponentContext
-import navigation.NavComponent
+import tictactoe.navigation.NavComponent
 
 class FinishScreen(
     private val componentContext: ComponentContext,

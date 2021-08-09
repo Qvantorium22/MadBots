@@ -1,4 +1,4 @@
-package navigation
+package tictactoe.navigation
 
 import androidx.compose.runtime.Composable
 

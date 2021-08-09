@@ -1,4 +1,4 @@
-package navigation
+package tictactoe.navigation
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
@@ -7,7 +7,7 @@ import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
-import navigation.screens.*
+import tictactoe.navigation.screens.*
 
 class NavHostComponent(componentContext: ComponentContext) : NavComponent, ComponentContext by componentContext {
     private val router = router<ScreenConfig, NavComponent>(

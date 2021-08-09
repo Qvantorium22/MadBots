@@ -1,4 +1,3 @@
-import androidx.compose.desktop.DesktopTheme
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,11 +7,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.window.v1.Menu
-import androidx.compose.ui.window.v1.MenuBar
-import androidx.compose.ui.window.v1.MenuItem
 import com.arkivanov.decompose.extensions.compose.jetbrains.rememberRootComponent
-import navigation.NavHostComponent
+import tictactoe.navigation.NavHostComponent
 
 fun main() = Window(size = IntSize(900, 600), resizable = true, title = "MadBots") {
     MaterialTheme {

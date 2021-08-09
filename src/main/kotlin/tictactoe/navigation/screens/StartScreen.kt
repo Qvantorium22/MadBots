@@ -1,4 +1,4 @@
-package navigation.screens
+package tictactoe.navigation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
-import navigation.NavComponent
+import tictactoe.navigation.NavComponent
 
 class StartScreen(
     private val componentContext: ComponentContext,

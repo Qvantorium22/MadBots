@@ -1,4 +1,4 @@
-package realize
+package tictactoe
 
 class Interactor {
 

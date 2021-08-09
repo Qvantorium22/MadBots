@@ -1,4 +1,4 @@
-package realize
+package tictactoe
 
 import core.MadPlayer
 import core.Markelable

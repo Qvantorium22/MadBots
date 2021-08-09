@@ -1,8 +1,8 @@
 import core.Point
 import org.junit.jupiter.api.Test
-import realize.ConsolePlayer
-import realize.Mark
-import realize.TTTEInteractor
+import tictactoe.ConsolePlayer
+import tictactoe.Mark
+import tictactoe.TTTEInteractor
 import kotlin.test.AfterTest
 import kotlin.test.assertEquals
 
