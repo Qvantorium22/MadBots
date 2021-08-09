@@ -42,14 +42,11 @@ class Matrix(
     }
 
     fun clearData(){
-        val data = arrayListOf<ArrayList<MutableState<Int>>>()
-        for (i in 0 until weight) {
-            val line = arrayListOf<MutableState<Int>>()
-            for (j in 0 until height)
-                line.add(mutableStateOf(defaultMark))
-            data.add(line)
+        _dataFlow.value.forEach {
+            it.forEach {
+                it.value = 0
+            }
         }
-        _dataFlow.value = data
         update()
     }
 

@@ -74,4 +74,6 @@ abstract class MadInteractor<T : Markelable>(
     }
 
     fun getSizeMatrix() = IntSize(matrix.weight, matrix.height)
+
+    fun clearData() = matrix.clearData()
 }

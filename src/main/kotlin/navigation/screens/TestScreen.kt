@@ -35,9 +35,9 @@ class TestScreen(
         firstPlayer,
         secondPlayer
     )
-    private val sizeMatrix = interactor.getSizeMatrix()
     var listState = arrayListOf<ArrayList<MutableState<Int>>>()
     private var isFirstPlayerMove = mutableStateOf(true)
+    private val whoWin = mutableStateOf(0)
 
     init {
         listState = interactor.getDataFlow().value!!
@@ -57,7 +57,7 @@ class TestScreen(
                                 .border(
                                     BorderStroke(
                                         5.dp,
-                                        if (!isFirstPlayerMove.value) Color.White else Color.Unspecified
+                                        if (whoWin.value == 2) Color.Green else if (!isFirstPlayerMove.value && whoWin.value == 0) Color.White else Color.Unspecified
                                     )
                                 )
                         ) {
@@ -67,14 +67,20 @@ class TestScreen(
                                 modifier = Modifier.fillMaxWidth().aspectRatio(1f).padding(15.dp)
                             )
                         }
-                        Spacer(Modifier.weight(1f))
+                        Box(modifier = Modifier.weight(1f).padding(10.dp), contentAlignment = Alignment.Center) {
+                            Button(onClick = {
+                                interactor.clearData(); stateWin.value = ""; isFirstPlayerMove.value = true
+                                whoWin.value = 0
+                                interactor.restart()
+                            }) {}
+                        }
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier.weight(1f).padding(10.dp)
                                 .border(
                                     BorderStroke(
                                         5.dp,
-                                        if (isFirstPlayerMove.value) Color.White else Color.Unspecified
+                                        if (whoWin.value == 1) Color.Green else if (isFirstPlayerMove.value && whoWin.value == 0) Color.White else Color.Unspecified
                                     )
                                 )
                         ) {
@@ -135,19 +141,26 @@ class TestScreen(
                                 .weight(1f)
                                 .padding(start = 5.dp),
                             onClick = {
-                                if (interactor.stateWin.value == "") {
-//                                    connect()
+                                if (stateWin.value == "") {
                                     if (isFirstPlayerMove.value) {
                                         if (interactor.playerTurn(firstPlayer, i, j)) {
                                             isFirstPlayerMove.value = !isFirstPlayerMove.value
-                                            if (interactor.stateWin.value != "")
-                                                onGoToFinish(interactor.stateWin.value)
+                                            if (stateWin.value != "")
+                                                when (stateWin.value) {
+                                                    "win1" -> whoWin.value = 1
+                                                    "win2" -> whoWin.value = 2
+                                                }
+//                                                onGoToFinish(stateWin.value)
                                         }
                                     } else {
                                         if (interactor.playerTurn(secondPlayer, i, j)) {
                                             isFirstPlayerMove.value = !isFirstPlayerMove.value
                                             if (interactor.stateWin.value != "")
-                                                onGoToFinish(interactor.stateWin.value)
+                                                when (stateWin.value) {
+                                                    "win1" -> whoWin.value = 1
+                                                    "win2" -> whoWin.value = 2
+                                                }
+//                                                onGoToFinish(stateWin.value)
                                         }
                                     }
 
@@ -161,7 +174,7 @@ class TestScreen(
                                 }
                                 Mark.X.value ->
                                     Image(
-                                        bitmap = imageResource("drawable/krest.png"),
+                                        bitmap = imageResource("drawable/delete.png"),
                                         contentDescription = "",
                                         modifier = modifier
                                     )
