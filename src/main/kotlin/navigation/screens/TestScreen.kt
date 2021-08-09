@@ -1,41 +1,26 @@
 package navigation.screens
 
-import androidx.compose.desktop.DesktopTheme
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.vectorXmlResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
-import core.MadInteractor
-import core.Matrix
-import core.Point
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import navigation.NavComponent
 import realize.Mark
-import realize.MarkTransform.transformToMark
 import realize.TTTEInteractor
 import realize.UIPlayer
 import realize.User
-import javax.swing.BoxLayout
-
 
 class TestScreen(
     private val componentContext: ComponentContext,
@@ -50,28 +35,13 @@ class TestScreen(
         firstPlayer,
         secondPlayer
     )
-    private val sizeMatrix = interactor.getSizeMatrix()
-    var listState = listOf<List<MutableState<Mark>>>()
+    var listState = arrayListOf<ArrayList<MutableState<Int>>>()
     private var isFirstPlayerMove = mutableStateOf(true)
+    private val whoWin = mutableStateOf(0)
 
     init {
-        listState = List(sizeMatrix.height) { List(sizeMatrix.height) { mutableStateOf(Mark.NOTHING) } }
-        GlobalScope.launch(Dispatchers.Main) {
-            connect()
-        }
+        listState = interactor.getDataFlow().value!!
         stateWin = interactor.stateWin
-    }
-
-    private fun connect() {
-        GlobalScope.launch(Dispatchers.Main) {
-            interactor.getDataFlow().collect { row ->
-                if (row != null) {
-                    for (y in row.indices)
-                        for (x in row[y].indices)
-                            listState[x][y].value = (transformToMark(row[x][y]) as Mark)
-                }
-            }
-        }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -87,7 +57,7 @@ class TestScreen(
                                 .border(
                                     BorderStroke(
                                         5.dp,
-                                        if (!isFirstPlayerMove.value) Color.White else Color.Unspecified
+                                        if (whoWin.value == 2) Color.Green else if (!isFirstPlayerMove.value && whoWin.value == 0) Color.White else Color.Unspecified
                                     )
                                 )
                         ) {
@@ -97,14 +67,20 @@ class TestScreen(
                                 modifier = Modifier.fillMaxWidth().aspectRatio(1f).padding(15.dp)
                             )
                         }
-                        Spacer(Modifier.weight(1f))
+                        Box(modifier = Modifier.weight(1f).padding(10.dp), contentAlignment = Alignment.Center) {
+                            Button(onClick = {
+                                interactor.clearData(); stateWin.value = ""; isFirstPlayerMove.value = true
+                                whoWin.value = 0
+                                interactor.restart()
+                            }) {}
+                        }
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier.weight(1f).padding(10.dp)
                                 .border(
                                     BorderStroke(
                                         5.dp,
-                                        if (isFirstPlayerMove.value) Color.White else Color.Unspecified
+                                        if (whoWin.value == 1) Color.Green else if (isFirstPlayerMove.value && whoWin.value == 0) Color.White else Color.Unspecified
                                     )
                                 )
                         ) {
@@ -165,19 +141,26 @@ class TestScreen(
                                 .weight(1f)
                                 .padding(start = 5.dp),
                             onClick = {
-                                if (interactor.stateWin.value == "") {
-                                    connect()
+                                if (stateWin.value == "") {
                                     if (isFirstPlayerMove.value) {
                                         if (interactor.playerTurn(firstPlayer, i, j)) {
                                             isFirstPlayerMove.value = !isFirstPlayerMove.value
-                                            if (interactor.stateWin.value != "")
-                                                onGoToFinish(interactor.stateWin.value)
+                                            if (stateWin.value != "")
+                                                when (stateWin.value) {
+                                                    "win1" -> whoWin.value = 1
+                                                    "win2" -> whoWin.value = 2
+                                                }
+//                                                onGoToFinish(stateWin.value)
                                         }
                                     } else {
                                         if (interactor.playerTurn(secondPlayer, i, j)) {
                                             isFirstPlayerMove.value = !isFirstPlayerMove.value
                                             if (interactor.stateWin.value != "")
-                                                onGoToFinish(interactor.stateWin.value)
+                                                when (stateWin.value) {
+                                                    "win1" -> whoWin.value = 1
+                                                    "win2" -> whoWin.value = 2
+                                                }
+//                                                onGoToFinish(stateWin.value)
                                         }
                                     }
 
@@ -187,15 +170,15 @@ class TestScreen(
                         ) {
                             val modifier = Modifier.padding(5.dp)
                             when (listState[j][i].value) {
-                                Mark.NOTHING -> {
+                                Mark.NOTHING.value -> {
                                 }
-                                Mark.X ->
+                                Mark.X.value ->
                                     Image(
-                                        bitmap = imageResource("drawable/krest.png"),
+                                        bitmap = imageResource("drawable/delete.png"),
                                         contentDescription = "",
                                         modifier = modifier
                                     )
-                                Mark.Y ->
+                                Mark.Y.value ->
                                     Image(
                                         bitmap = imageResource("drawable/nolik.png"),
                                         contentDescription = "",

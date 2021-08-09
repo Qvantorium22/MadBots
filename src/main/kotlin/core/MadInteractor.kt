@@ -1,5 +1,7 @@
 package core
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.IntSize
 import core.validators.PoleIsEmptyValidators
@@ -20,24 +22,24 @@ abstract class MadInteractor<T : Markelable>(
 
     private val _markFlow: MutableStateFlow<List<List<T>>?> = MutableStateFlow(null)
 
-    val markFlow: Flow<List<List<T>>?> = matrix.dataFlow.map { row ->
-        var list = listOf<List<T>>()
-        if (row != null) {
-            list = List(row.size) { collumn ->
-                List(row[collumn].size) { y ->
-                    transform(row[collumn][y])
-                }
-            }
-        } else
-            println(row)
-        return@map list
-    }
+//    val markFlow: Flow<List<List<T>>?> = matrix.dataFlow.map { row ->
+//        var list = listOf<List<T>>()
+//        if (row != null) {
+//            list = List(row.size) { collumn ->
+//                List(row[collumn].size) { y ->
+//                    transform(row[collumn][y])
+//                }
+//            }
+//        } else
+//            println(row)
+//        return@map list
+//    }
 
     fun getDataFlow() = matrix.dataFlow
 
     private val matrixValidators = mutableListOf(
         PoleIsEmptyValidators {
-            matrix.dataFlow.value!![it.y][it.x]
+            matrix.dataFlow.value!![it.y][it.x].value
         }
     )
 
@@ -63,7 +65,7 @@ abstract class MadInteractor<T : Markelable>(
 
     override fun getMark(point: Point): T {
         return if (point.y in 0 until matrix.height && point.x in 0 until matrix.weight)
-            transform(matrix.dataFlow.value!![point.y][point.x])
+            transform(matrix.dataFlow.value!![point.y][point.x].value)
                 else transform(0)
     }
 
@@ -72,4 +74,6 @@ abstract class MadInteractor<T : Markelable>(
     }
 
     fun getSizeMatrix() = IntSize(matrix.weight, matrix.height)
+
+    fun clearData() = matrix.clearData()
 }
